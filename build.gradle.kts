@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.22"
     kotlin("plugin.spring") version "1.8.22"
+    id("org.jetbrains.kotlinx.kover") version "0.7.1"
 }
 
 group = "com.msl"
@@ -27,11 +28,40 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
+        freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
     }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
+}
+
+val excludeCoverage = listOf(
+    "**/*\$logger\$*.class",
+)
+
+koverReport {
+    defaults{
+        filters{
+            excludes{
+                classes(excludeCoverage)
+            }
+        }
+        html{
+            onCheck = true
+            setReportDir(layout.buildDirectory.dir("reports/jacoco/test/html"))
+        }
+        xml{
+            onCheck = true
+            setReportFile(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+        }
+    }
+}
+
+tasks.register("jacocoTestReport") {
+    dependsOn("test", "koverHtmlReport", "koverXmlReport")
 }
