@@ -1,35 +1,27 @@
-import os
-from bs4 import BeautifulSoup
+import re
+import sys
 
-# Define o caminho para o arquivo index.html
-index_file_path = "./build/reports/jacoco/test/html/index.html"
+# Caminho do arquivo HTML gerado
+caminho_arquivo = "./build/reports/jacoco/test/html/index.html"
 
-# Verifica se o arquivo index.html existe
-if not os.path.exists(index_file_path):
-    print("O arquivo index.html não foi encontrado.")
-    exit(1)
+# Abre o arquivo e lê o conteúdo
+with open(caminho_arquivo, 'r') as arquivo:
+    conteudo = arquivo.read()
 
-# Lê o conteúdo do arquivo index.html
-with open(index_file_path, "r", encoding="utf-8") as file:
-    content = file.read()
+# Procura o valor "100%" usando expressões regulares
+padrao = r'<span class="percent">\s*(.*?)\s*</span>'
+resultado = re.search(padrao, conteudo)
 
-# Analisa o conteúdo HTML com BeautifulSoup
-soup = BeautifulSoup(content, "html.parser")
+# Verifica se o valor foi encontrado
+if resultado:
+    valor_percentual = resultado.group(1).replace('%', '')  # Remove o símbolo de percentagem, se presente
+    valor_percentual = float(valor_percentual)
 
-# Encontra o elemento da tabela com a porcentagem de linhas cobertas
-line_coverage_element = soup.find("th", string="Line, %")
-if line_coverage_element is None:
-    print("Elemento 'Line, %' não encontrado no arquivo index.html.")
-    exit(1)
-
-# Obtém a porcentagem de cobertura de linhas
-line_coverage = line_coverage_element.find_next_sibling("td").find("span", class_="percent").get_text(strip=True)
-
-# Converte a porcentagem em um valor numérico
-line_coverage_percentage = float(line_coverage.strip("%"))
-
-# Verifica se a cobertura de linhas é maior ou igual a 90%
-if line_coverage_percentage >= 90:
-    print(f"A cobertura de linhas é de {line_coverage_percentage}%. Parabéns!")
+    # Verifica se o valor é menor que 90%
+    if valor_percentual < 90:
+        print("Erro: O valor percentual é menor que 90%.")
+        sys.exit(1)
+    else:
+        print("Valor percentual: ", valor_percentual)
 else:
-    print(f"A cobertura de linhas é de {line_coverage_percentage}%. É necessário melhorar a cobertura.")
+    print("Valor percentual não encontrado.")
