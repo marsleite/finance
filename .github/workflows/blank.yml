@@ -38,4 +38,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: app/build/reports/jacoco/test/html/
+          path: app/build/reports/jacoco/test/
+
+      - name: Analisar relatório de cobertura
+        run: |
+            coverage_percentage=$(sed -n 's/.*<counter type="INSTRUCTION" missed="0" covered="\([0-9]*\)".*/\1/p' app/build/reports/jacoco/test/jacocoTestReport.xml)
+            if [ "$coverage_percentage" -lt 90 ]; then
+              echo "Cobertura de testes insuficiente. A cobertura atual é de $coverage_percentage%."
+              exit 1
+            fi
