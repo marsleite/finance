@@ -34,7 +34,7 @@ jobs:
       - name: Verify test coverage
         run: |
             report_path="./build/reports/jacoco/test/html/index.html"
-            coverage_percentage=$(awk '/Overall coverage/ {sub(/[^0-9]/, "", $2); print $2}' $report_path)
+            coverage_percentage=$(grep -oP '(?<=<span class="percent">\s{4})\d+' $report_path)
             if (( $(echo "$coverage_percentage >= 90" |bc -l) )); then
               echo "Test coverage is at least 90%"
             else
