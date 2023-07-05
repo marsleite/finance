@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 def check_coverage():
-    tree = ET.parse('reports/jacoco/test/jacocoTestReport.xml')
+    tree = ET.parse('./build/reports/jacoco/test/jacocoTestReport.xml')
     root = tree.getroot()
 
     total_lines = 0
