@@ -22,22 +22,21 @@ jobs:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
           
+      - name: Build and run tests
+        run: ./gradlew clean build
+
       - name: Generate test coverage report
         run: ./gradlew jacocoTestReport
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: ./build/reports/jacoco/test/html/index.html
-
       - name: Verify test coverage
         run: |
-            report_path="./build/reports/jacoco/test/html/index.html"
-            coverage_percentage=$(awk '/Overall Coverage Summary/ {sub(/[^0-9]/, "", $2); print $2}' $report_path)
-            if (( $(echo "$coverage_percentage >= 10" |bc -l) )); then
-              echo "Test coverage is at least 90%"
-            else
-              echo "Test coverage is below 90%"
-              exit 1
-            fi
+              report_path="./build/reports/jacoco/test/jacocoTestReport.xml"
+              
+              coverage_percentage=$(grep -oP '(?<=line-rate=")\d+(\.\d+)?' $report_path)
+              
+              if (( $(echo "$coverage_percentage >= 90" | bc -l) )); then
+                echo "Test coverage is at least 90%"
+              else
+                echo "Test coverage is below 90%"
+                exit 1
+              fi
