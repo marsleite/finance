@@ -29,4 +29,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: application/build/reports/jacoco/test/
+          path: ./build/reports/jacoco/test/html/index.html
+
+      - name: Verify test coverage
+        run: |
+            report_path="./build/reports/jacoco/test/html/index.html"
+            coverage_percentage=$(awk '/Overall coverage/ {print substr($4, 1, length($4)-1)}' $report_path)
+            if (( $(echo "$coverage_percentage >= 90" |bc -l) )); then
+              echo "Test coverage is at least 90%"
+            else
+              echo "Test coverage is below 90%"
+              exit 1
+            fi
