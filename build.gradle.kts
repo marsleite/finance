@@ -10,6 +10,8 @@ plugins {
 
 allprojects {
     apply(plugin = "kotlin")
+    apply(plugin = "project-report")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
     repositories {
         mavenCentral()
     }
@@ -27,7 +29,8 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("io.projectreactor:reactor-test")
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+        testImplementation("io.mockk:mockk:1.13.3")
     }
 
     tasks.withType<KotlinCompile> {
@@ -45,8 +48,14 @@ subprojects {
     }
 }
 
+dependencies{
+    kover(project("domain"))
+    kover(project("application"))
+}
+
 val excludeCoverage = listOf(
     "**/*\$logger\$*.class",
+    "com.msl.finance.application.dto.*"
 )
 
 koverReport {
