@@ -1,28 +1,30 @@
-import xml.etree.ElementTree as ET
+import os
+from bs4 import BeautifulSoup
 
-def check_coverage():
-    tree = ET.parse('./build/reports/jacoco/test/jacocoTestReport.xml')  # Caminho para o relatório XML gerado pelo Kover
-    root = tree.getroot()
+# Caminho do relatório de cobertura
+report_path = "./build/reports/jacoco/test/html/index.html"
 
-    total_lines = 0
-    covered_lines = 0
+# Verifica se o arquivo de relatório existe
+if not os.path.isfile(report_path):
+    print("O arquivo de relatório não foi encontrado.")
+    exit(1)
 
-    for package in root.findall('package'):
-        for clazz in package.findall('class'):
-            for sourcefile in clazz.findall('sourcefile'):
-                for line in sourcefile.findall('line'):
-                    total_lines += 1
-                    covered_lines += int(line.attrib.get('ci', 0))
+# Abre o arquivo de relatório
+with open(report_path, "r") as f:
+    content = f.read()
 
-    if total_lines == 0:
-        print('No lines found in the coverage report.')
-        return
+# Analisa o conteúdo HTML do relatório
+soup = BeautifulSoup(content, "html.parser")
 
-    coverage_percentage = (covered_lines / total_lines) * 100
+# Extrai a porcentagem de linhas cobertas
+line_coverage_element = soup.find("th", text="Line, %")
+line_coverage = line_coverage_element.find_next_sibling("td").text.strip()
 
-    if coverage_percentage >= 90:
-        print('Coverage meets the minimum requirement.')
-    else:
-        print('Coverage does not meet the minimum requirement.')
+# Converte a porcentagem em um número decimal
+line_coverage = float(line_coverage.rstrip("%")) / 100
 
-check_coverage()
+# Verifica se a cobertura de linha é maior ou igual a 90%
+if line_coverage >= 0.9:
+    print("A cobertura de linha é satisfatória.")
+else:
+    print("A cobertura de linha é insuficiente.")

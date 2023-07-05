@@ -25,5 +25,13 @@ jobs:
       - name: Build and generate coverage report
         run: ./gradlew clean build
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # Especifique a versão do Python que deseja usar
+
+      - name: Install dependencies
+        run: pip install beautifulsoup4
+
       - name: Check coverage percentage
         run: python3 scripts/check_coverage.py
