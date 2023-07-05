@@ -23,7 +23,7 @@ jobs:
           java-version: '17'
 
       - name: Build and generate coverage report
-        run: ./gradlew clean build
+        run: ./gradlew build
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -34,4 +34,4 @@ jobs:
         run: pip install beautifulsoup4
 
       - name: Check coverage percentage
-        run: python3 scripts/check_coverage.py
+        run: python3 ./scripts/check_coverage.py ./build/reports/jacoco/test/html/index.html
