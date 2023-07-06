@@ -4,6 +4,7 @@ import com.msl.finance.application.routers.ExceptionHandler
 import com.msl.finance.application.routers.extensions.BadGatewayHandler
 import com.msl.finance.application.routers.extensions.BadRequestHandler
 import com.msl.finance.exception.BadRequestException
+import com.msl.finance.exception.CommunicationExternalException
 import com.msl.finance.exception.TypeException
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,28 +17,19 @@ import org.springframework.web.reactive.function.server.ServerRequest
 @ExperimentalCoroutinesApi
 class ExceptionHandlerTest {
 
-    private val handler = ExceptionHandler(mapOf(
-        setOf(TypeException.INVALID_REQUEST.name) to BadRequestHandler(),
-        setOf(TypeException.PUBLISHER_ERROR.name) to BadGatewayHandler()
+    val handler = ExceptionHandler(mapOf(
+        setOf("INVALID_REQUEST") to BadRequestHandler(),
+        setOf("PUBLISHER_ERROR") to BadGatewayHandler()
     ))
 
-    private val request = mockk<ServerRequest>()
+    val request = mockk<ServerRequest>()
 
     @Test
     fun `should handler exception bad request`() {
-        val exception = BadRequestException("messages", TypeException.INVALID_REQUEST.name)
+        val exception = BadRequestException("message", "INVALID_REQUEST")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.BAD_REQUEST.value())
-        }
-    }
-
-    @Test
-    fun `should handler exception bad gateway`() {
-        val exception = BadRequestException("messages", TypeException.PUBLISHER_ERROR.name)
-        runTest {
-            val result = handler.handler(exception, request)
-            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.BAD_GATEWAY.value())
+            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value())
         }
     }
 
@@ -46,7 +38,7 @@ class ExceptionHandlerTest {
         val exception = BadRequestException("message", "INVALID_TYPE")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
         }
     }
 
@@ -55,7 +47,16 @@ class ExceptionHandlerTest {
         val exception = IllegalArgumentException("message")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        }
+    }
+
+    @Test
+    fun `should handler an exception bad gateway`() {
+        val exception = CommunicationExternalException("message", "PUBLISHER_ERROR")
+        runTest {
+            val result = handler.handler(exception, request)
+            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY.value())
         }
     }
 }

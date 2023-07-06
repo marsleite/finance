@@ -8,13 +8,13 @@ caminho_arquivo = "./build/reports/jacoco/test/html/index.html"
 with open(caminho_arquivo, 'r') as arquivo:
     conteudo = arquivo.read()
 
-# Procura o valor "100%" usando expressões regulares
+# Procura o quarto valor "100%" usando expressões regulares
 padrao = r'<span class="percent">\s*(.*?)\s*</span>'
-resultado = re.search(padrao, conteudo)
+ocorrencias = re.findall(padrao, conteudo)
 
-# Verifica se o valor foi encontrado
-if resultado:
-    valor_percentual = resultado.group(1).replace('%', '')  # Remove o símbolo de percentagem, se presente
+# Verifica se existem pelo menos 4 ocorrências
+if len(ocorrencias) >= 4:
+    valor_percentual = ocorrencias[3].replace('%', '')  # Remove o símbolo de percentagem, se presente
     valor_percentual = float(valor_percentual)
 
     # Verifica se o valor é menor que 90%
@@ -24,4 +24,5 @@ if resultado:
     else:
         print("Valor percentual: ", valor_percentual)
 else:
-    print("Valor percentual não encontrado.")
+    print("Quarta ocorrência de <span class='percent'> não encontrada.")
+
