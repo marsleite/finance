@@ -1,4 +1,4 @@
-package com.msl.finance.application.handlers
+package com.msl.finance.application.routers
 
 import com.msl.finance.application.dto.HttpErrorResponse
 import com.msl.finance.application.routers.extensions.TemplateHandler
