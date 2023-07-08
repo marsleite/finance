@@ -30,7 +30,7 @@ data class UserEntity(
     )
 
     fun toDomain() = User(
-        id = checkNotNull(id),
+        id = id,
         firstName = firstName,
         lastName = lastName,
         email = email,
