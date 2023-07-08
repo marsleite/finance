@@ -29,7 +29,7 @@ class ExceptionHandlerTest {
         val exception = BadRequestException("message", "INVALID_REQUEST")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value())
+            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.BAD_REQUEST.value())
         }
     }
 
@@ -38,7 +38,7 @@ class ExceptionHandlerTest {
         val exception = BadRequestException("message", "INVALID_TYPE")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
         }
     }
 
@@ -47,7 +47,7 @@ class ExceptionHandlerTest {
         val exception = IllegalArgumentException("message")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
         }
     }
 
@@ -56,7 +56,7 @@ class ExceptionHandlerTest {
         val exception = CommunicationExternalException("message", "PUBLISHER_ERROR")
         runTest {
             val result = handler.handler(exception, request)
-            Assertions.assertThat(result.rawStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY.value())
+            Assertions.assertThat(result.statusCode().value()).isEqualTo(HttpStatus.BAD_GATEWAY.value())
         }
     }
 }
