@@ -2,16 +2,16 @@ package com.msl.finance.resource.repository.sql.impl
 
 import com.msl.finance.exception.RepositoryException
 import com.msl.finance.exception.TypeException
-import com.msl.finance.gateway.UserRepository
+import com.msl.finance.gateway.UserRepositoryGateway
 import com.msl.finance.model.User
 import com.msl.finance.resource.repository.entity.UserEntity
 import com.msl.finance.resource.repository.sql.spring.UserRepositorySpring
 import org.springframework.stereotype.Component
 
 @Component
-class UserRepositoryImpl(
+class UserRepositoryGatewayImpl(
   private val userRepositorySpring: UserRepositorySpring
-): UserRepository {
+): UserRepositoryGateway {
   override suspend fun registerUser(user: User): User {
     return user.id?.let {
       throw RepositoryException(

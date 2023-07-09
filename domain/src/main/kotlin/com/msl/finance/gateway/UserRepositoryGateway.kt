@@ -2,7 +2,7 @@ package com.msl.finance.gateway
 
 import com.msl.finance.model.User
 
-interface UserRepository {
+interface UserRepositoryGateway {
 
     suspend fun registerUser(user: User): User
 }
