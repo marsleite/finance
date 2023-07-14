@@ -3,7 +3,7 @@ package com.msl.finance.model
 import java.time.LocalDateTime
 
 data class User(
-    val id: String,
+    val id: Long?,
     val firstName: String,
     val lastName: String,
     val email: String,

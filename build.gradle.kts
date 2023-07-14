@@ -61,7 +61,8 @@ val excludeCoverage = listOf(
     "com.msl.finance.FinanceApplicationKt",
     "com.msl.finance.exception.*",
     "com.msl.finance.model.*",
-    "com.msl.finance.application.beans.*"
+    "com.msl.finance.application.beans.*",
+    "com.msl.finance.resource.repository.entity.*"
 )
 
 koverReport {
