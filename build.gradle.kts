@@ -28,6 +28,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+        implementation("org.slf4j:slf4j-api:2.0.7")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
         testImplementation("io.mockk:mockk:1.13.3")
@@ -57,7 +58,11 @@ val excludeCoverage = listOf(
     "**/*\$logger\$*.class",
     "com.msl.finance.application.dto.*",
     "com.msl.finance.FinanceApplication.kt",
-    "com.msl.finance.FinanceApplicationKt"
+    "com.msl.finance.FinanceApplicationKt",
+    "com.msl.finance.exception.*",
+    "com.msl.finance.model.*",
+    "com.msl.finance.application.beans.*",
+    "com.msl.finance.resource.repository.entity.*"
 )
 
 koverReport {
