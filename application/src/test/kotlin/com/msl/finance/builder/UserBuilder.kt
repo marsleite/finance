@@ -4,7 +4,7 @@ import com.msl.finance.model.User
 import java.time.LocalDateTime
 
 class UserBuilder(
-  var id: Long? = 29,
+  var id: String? = "29",
   var firstName: String = "Marcelo",
   var lastName: String = "Leite",
   var email: String = "test@email.com",

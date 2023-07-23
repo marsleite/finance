@@ -35,7 +35,7 @@ class UserRepositoryImplTest {
 
     val result = target.registerUser(user.build { id = null })
 
-    Assertions.assertEquals(29, result.id)
+    Assertions.assertEquals("29", result.id)
     Assertions.assertEquals("Marcelo", result.firstName)
     Assertions.assertEquals("test@email.com", result.email)
 
