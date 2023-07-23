@@ -8,10 +8,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
     implementation("org.springframework:spring-core")
-    testRuntimeOnly("com.h2database:h2")
-    runtimeOnly("dev.miku:r2dbc-mysql")
     runtimeOnly("io.r2dbc:r2dbc-h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.+")
 
     runtimeOnly("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
     runtimeOnly("mysql:mysql-connector-java:8.0.33")
