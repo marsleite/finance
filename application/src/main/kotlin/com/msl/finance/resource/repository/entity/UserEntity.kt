@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Table(name = "users")
 data class UserEntity(
     @Id
-    val id: Long?,
+    val id: String?,
     val firstName: String,
     val lastName: String,
     val email: String,
